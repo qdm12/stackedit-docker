@@ -1,0 +1,9 @@
+version: '3'
+services:
+    stackedit:
+        image: qmcgaw/stackedit
+        container_name: stackedit
+        ports:
+            - "8080:8080/tcp"
+        network_mode: bridge
+        restart: always
