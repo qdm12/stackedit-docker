@@ -10,6 +10,9 @@ Docker build:
 Stackedit build:
 [![Build Status](https://img.shields.io/travis/benweet/stackedit.svg?style=flat)](https://travis-ci.org/benweet/stackedit)
 
+[![](https://images.microbadger.com/badges/image/qmcgaw/stackedit.svg)](https://microbadger.com/images/qmcgaw/stackedit "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/qmcgaw/stackedit.svg)](https://microbadger.com/images/qmcgaw/stackedit "Get your own version badge on microbadger.com")
+
 This image is **581 MB** and consumes **340MB-500MB** of RAM
 
 It is based on:
