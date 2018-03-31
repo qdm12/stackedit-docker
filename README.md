@@ -1,6 +1,6 @@
 # StackEdit Docker server
 
-Run a StackEdit server in a Docker container.
+Run a StackEdit v5.10.4 (April 2018) server in a Docker container.
 
 [![Docker StackEdit](https://github.com/qdm12/stackedit-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/stackedit/)
 

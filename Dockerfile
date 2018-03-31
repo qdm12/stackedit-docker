@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.7
 LABEL maintainer="quentin.mcgaw@gmail.com" \
       description="Run the latest StackEdit server in a Docker container" \
       size="581MB" \
