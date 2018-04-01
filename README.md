@@ -13,7 +13,9 @@ Stackedit build:
 [![](https://images.microbadger.com/badges/image/qmcgaw/stackedit.svg)](https://microbadger.com/images/qmcgaw/stackedit "Get your own image badge on microbadger.com")
 [![](https://images.microbadger.com/badges/version/qmcgaw/stackedit.svg)](https://microbadger.com/images/qmcgaw/stackedit "Get your own version badge on microbadger.com")
 
-This image is **581 MB** and consumes **340MB-500MB** of RAM
+| Download size | Image size | RAM usage | CPU usage |
+| --- | --- | --- | --- |
+| 179MB | 581MB | 310MB | Very low |
 
 It is based on:
 - [Stackedit](https://github.com/benweet/stackedit)
