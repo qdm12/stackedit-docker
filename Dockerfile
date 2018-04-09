@@ -13,7 +13,7 @@ RUN apk add -q --progress --update --no-cache git nodejs && \
             Dockerfile LICENSE README.md && \
     npm --silent install && \
     npm --silent run build && \
-    apk del -q --progress --purge git ** \
+    apk del -q --progress --purge git && \
     rm -rf /var/cache/apk/*
 EXPOSE 8080
 WORKDIR /stackedit
