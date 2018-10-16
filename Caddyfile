@@ -1,0 +1,3 @@
+http://localhost {
+    root /stackedit
+}
