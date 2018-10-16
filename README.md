@@ -1,6 +1,6 @@
 # StackEdit Docker server
 
-Run a StackEdit v5.13.2 (October 2018) server with Caddy server in a lightweight Docker container
+Run a StackEdit v5.13.2 (October 2018) server with Nginx in a lightweight Docker container
 
 [![Docker StackEdit](https://github.com/qdm12/stackedit-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/stackedit/)
 
@@ -24,16 +24,15 @@ Stackedit build:
 
 | Download size | Image size | RAM usage | CPU usage |
 | --- | --- | --- | --- |
-| ???MB | 51.2MB | 2-3MB | Very low |
+| ???MB | 45.5MB | 7MB | Very low |
 
 ## Features
 
 - [Stackedit features](https://github.com/benweet/stackedit/blob/master/README.md#stackedit-can)
 - Lightweight image based on:
-  - [Stackedit 5.13.2](https://github.com/benweet/stackedit) (38MB)
-  - Alpine 3.8 (4.41MB)
-  - Caddy HTTP server (9MB)
-- Robust Caddy server (you can easily add HTTPS if needed)
+  - [Stackedit 5.13.2](https://github.com/benweet/stackedit)
+  - Alpine 3.8
+  - Nginx HTTP server
 
 ## Setup
 
@@ -75,3 +74,6 @@ Go to [http://localhost:8000](http://localhost:8000)
 Credits to the [developers](https://github.com/benweet/stackedit/graphs/contributors) 
 of [StackEdit](https://stackedit.io/)
 
+## TODOs
+
+- [ ] Configuration of Stackedit
