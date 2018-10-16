@@ -25,7 +25,7 @@ LABEL maintainer="quentin.mcgaw@gmail.com" \
       cpu_usage="Very low" \
       github="https://github.com/qdm12/stackedit-docker"
 EXPOSE 80
+COPY --from=stackedit /stackedit/dist /stackedit
 COPY --from=caddy /go/src/github.com/mholt/caddy/caddy/caddy /usr/bin/caddy
 COPY Caddyfile /Caddyfile
-COPY --from=stackedit /stackedit/dist /stackedit
 ENTRYPOINT caddy -conf /Caddyfile -log stdout
