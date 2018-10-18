@@ -24,7 +24,7 @@ Stackedit build:
 
 | Download size | Image size | RAM usage | CPU usage |
 | --- | --- | --- | --- |
-| ???MB | ???MB | 7MB | Very low |
+| 9.9MB | 29.2MB | 7MB | Very low |
 
 ## Features
 

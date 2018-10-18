@@ -18,8 +18,8 @@ RUN go get -v ./... && \
 FROM scratch
 LABEL maintainer="quentin.mcgaw@gmail.com" \
       description="StackEdit server in a lightweight Docker container" \
-      download="???MB" \
-      size="???MB" \
+      download="9.9MB" \
+      size="29.2MB" \
       ram="7MB" \
       cpu_usage="Very low" \
       github="https://github.com/qdm12/stackedit-docker"
