@@ -9,7 +9,7 @@ RUN npm run build
 FROM nginx:1.15-alpine
 LABEL maintainer="quentin.mcgaw@gmail.com" \
       description="StackEdit server in a lightweight Docker container" \
-      download="???MB" \
+      download="15.6MB" \
       size="45.5MB" \
       ram="7MB" \
       cpu_usage="Very low" \
