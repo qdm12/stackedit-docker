@@ -10,7 +10,8 @@ FROM golang:alpine AS server
 RUN apk --update add git build-base upx
 WORKDIR /go/src/app
 COPY main.go ./
-RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags="-s -w" -installsuffix cgo -o server . && \
+RUN go get -v ./... && \
+    CGO_ENABLED=0 GOOS=linux go build -a -ldflags="-s -w" -installsuffix cgo -o server . && \
     upx -v --best --ultra-brute --overlay=strip server && \
     upx -t server
 
