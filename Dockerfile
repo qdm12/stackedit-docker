@@ -11,13 +11,14 @@ RUN apk --update add git build-base upx
 WORKDIR /go/src/app
 COPY main.go ./
 RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags="-s -w" -installsuffix cgo -o server . && \
-    upx -v --best --overlay=strip server && \
+    upx -v --best --ultra-brute --overlay=strip server && \
     upx -t server
 
 FROM scratch
 LABEL maintainer="quentin.mcgaw@gmail.com" \
       description="StackEdit server in a lightweight Docker container" \
-      size="29.6MB" \
+      download="???MB" \
+      size="???MB" \
       ram="7MB" \
       cpu_usage="Very low" \
       github="https://github.com/qdm12/stackedit-docker"
