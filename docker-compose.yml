@@ -4,6 +4,6 @@ services:
     image: qmcgaw/stackedit
     container_name: stackedit
     ports:
-      - 8000:80/tcp
+      - 8000:8000/tcp
     network_mode: bridge
     restart: always

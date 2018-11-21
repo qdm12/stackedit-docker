@@ -1,15 +1,11 @@
 # StackEdit Docker server
 
-Run a StackEdit v5.13.2 (October 2018) server with Nginx in a lightweight Docker container
+*StackEdit v5.13.2 (November 2018) with a Golang HTTP server on Scratch*
 
 [![Docker StackEdit](https://github.com/qdm12/stackedit-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/stackedit/)
 
-Docker build:
 [![Build Status](https://travis-ci.org/qdm12/stackedit-docker.svg?branch=master)](https://travis-ci.org/qdm12/stackedit-docker)
 [![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/stackedit.svg)](https://hub.docker.com/r/qmcgaw/stackedit)
-
-Stackedit build:
-[![Build Status](https://img.shields.io/travis/benweet/stackedit.svg?style=flat)](https://travis-ci.org/benweet/stackedit)
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/qdm12/stackedit-docker.svg)](https://github.com/qdm12/stackedit-docker/commits)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/qdm12/stackedit-docker.svg)](https://github.com/qdm12/stackedit-docker/commits)
@@ -19,31 +15,33 @@ Stackedit build:
 [![Docker Stars](https://img.shields.io/docker/stars/qmcgaw/stackedit.svg)](https://hub.docker.com/r/qmcgaw/stackedit)
 [![Docker Automated](https://img.shields.io/docker/automated/qmcgaw/stackedit.svg)](https://hub.docker.com/r/qmcgaw/stackedit)
 
-[![](https://images.microbadger.com/badges/image/qmcgaw/stackedit.svg)](https://microbadger.com/images/qmcgaw/stackedit)
-[![](https://images.microbadger.com/badges/version/qmcgaw/stackedit.svg)](https://microbadger.com/images/qmcgaw/stackedit)
+[![Image size](https://images.microbadger.com/badges/image/qmcgaw/stackedit.svg)](https://microbadger.com/images/qmcgaw/stackedit)
+[![Image version](https://images.microbadger.com/badges/version/qmcgaw/stackedit.svg)](https://microbadger.com/images/qmcgaw/stackedit)
 
-| Download size | Image size | RAM usage | CPU usage |
-| --- | --- | --- | --- |
-| 9.9MB | 29.2MB | 7MB | Very low |
+| Image size | RAM usage | CPU usage |
+| --- | --- | --- |
+| 29.3MB | 7MB | Very low |
 
 ## Features
 
 - [Stackedit features](https://github.com/benweet/stackedit/blob/master/README.md#stackedit-can)
 - Lightweight image based on:
   - [Stackedit 5.13.2](https://github.com/benweet/stackedit)
-  - Alpine 3.8
-  - Nginx HTTP server
+  - [Scratch](https://hub.docker.com/_/scratch)
+  - Golang simple HTTP static server
+- Running without root
+- Built-in Docker healthcheck
+- Nice emojis in the logs...
 
 ## Setup
 
-Using plain Docker with:
+Run with:
 
 ```bash
-docker run -d --name=stackedit --restart=always -p 8000:80/tcp qmcgaw/stackedit
+docker run -d -p 8000:8000/tcp qmcgaw/stackedit
 ```
 
-
-Or use Docker Compose:
+Compose with:
 
 ```yml
 version: '3'
@@ -52,22 +50,23 @@ services:
     image: qmcgaw/stackedit
     container_name: stackedit
     ports:
-      - 8000:80/tcp
+      - 8000:8000/tcp
     network_mode: bridge
-    restart: always
 ```
 
+and `docker-compose up -d`
 
-with the command
-
+Build with:
 
 ```bash
-docker-compose up -d
+docker build -t qmcgaw/stackedit https://github.com/qdm12/stackedit-docker.git
 ```
 
-## Testing
+Access with [http://localhost:8000](http://localhost:8000)
 
-Go to [http://localhost:8000](http://localhost:8000)
+## Environment variables
+
+- `LISTENINGPORT` to change the internal HTTP server listening port if you need to
 
 ## Acknowledgements
 
@@ -76,4 +75,4 @@ of [StackEdit](https://stackedit.io/)
 
 ## TODOs
 
-- [ ] Configuration of Stackedit
+- [ ] Configuration of Stackedit with env variables
