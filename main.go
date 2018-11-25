@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/kyokomi/emoji"
@@ -96,6 +97,13 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	})
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if len(r.URL.Path) >= 4 && r.URL.Path[:4] == "/app" {
+			if len(r.URL.Path) == 4 {
+				r.URL.Path = "/"
+			} else {
+				r.URL.Path = strings.Replace("/"+r.URL.Path[5:], "//", "/", -1)
+			}
+		}
 		http.ServeFile(w, r, "/html/"+r.URL.Path[1:])
 	})
 	log.Println("Web UI listening on 0.0.0.0:" + listeningPort + emoji.Sprint(" :ear:"))
