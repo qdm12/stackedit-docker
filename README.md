@@ -4,7 +4,6 @@
 
 [![Docker StackEdit](https://github.com/qdm12/stackedit-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/stackedit/)
 
-[![Build Status](https://travis-ci.org/qdm12/stackedit-docker.svg?branch=master)](https://travis-ci.org/qdm12/stackedit-docker)
 [![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/stackedit.svg)](https://hub.docker.com/r/qmcgaw/stackedit)
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/qdm12/stackedit-docker.svg)](https://github.com/qdm12/stackedit-docker/commits)
