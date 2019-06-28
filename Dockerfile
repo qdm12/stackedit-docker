@@ -46,9 +46,9 @@ FROM builder AS server
 COPY go.mod go.sum ./
 RUN go mod download
 COPY *.go ./
-#RUN go test -v
+#RUN go test -v -race ./...
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-s -w" -o app .
-RUN upx -v --best --ultra-brute --overlay=strip app && upx -t app
+RUN [ "${BINCOMPRESS}" == "" ] || (upx -v --best --lzma --overlay=strip app && upx -t app)
 
 FROM final
 COPY --from=stackedit --chown=1000 /stackedit/dist /html

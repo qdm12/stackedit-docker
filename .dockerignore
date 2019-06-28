@@ -1,5 +1,4 @@
 .git/
 readme/
 docker-compose.yml
-.travis.yml
 README.md

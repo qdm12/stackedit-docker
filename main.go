@@ -69,7 +69,7 @@ func healthcheck(listeningPort string) {
 		fmt.Println("Can't build HTTP request")
 		os.Exit(1)
 	}
-	client := &http.Client{Timeout: time.Duration(1000) * time.Millisecond}
+	client := &http.Client{Timeout: 1 * time.Second}
 	response, err := client.Do(request)
 	if err != nil {
 		fmt.Println("Can't execute HTTP request")

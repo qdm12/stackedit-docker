@@ -27,7 +27,7 @@
 
 - [Stackedit features](https://github.com/benweet/stackedit/blob/master/README.md#stackedit-can)
 - Lightweight image based on:
-  - [Stackedit 5.13.2](https://github.com/benweet/stackedit)
+  - [Stackedit 5.13.3](https://github.com/benweet/stackedit)
   - [Scratch](https://hub.docker.com/_/scratch)
   - Golang simple HTTP static server
 - Running without root
