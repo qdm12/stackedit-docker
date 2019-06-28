@@ -36,34 +36,55 @@
 
 ## Setup
 
-Run with:
+1. <details><summary>CLICK IF YOU HAVE AN ARM DEVICE</summary><p>
 
-```bash
-docker run -d -p 8000:8000/tcp qmcgaw/stackedit
-```
+    - If you have a ARM 32 bit v6 architecture
 
-Compose with:
+        ```sh
+        docker build -t qmcgaw/REPONAME_DOCKER \
+        --build-arg BASE_IMAGE_BUILDER_GO=arm32v6/golang \
+        --build-arg BASE_IMAGE_BUILDER_NODE=arm32v6/alpine \
+        --build-arg GOARCH=arm \
+        --build-arg GOARM=6 \
+        https://github.com/qdm12/stackedit-docker.git
+        ```
 
-```yml
-version: '3'
-services:
-  stackedit:
-    image: qmcgaw/stackedit
-    container_name: stackedit
-    ports:
-      - 8000:8000/tcp
-    network_mode: bridge
-```
+    - If you have a ARM 32 bit v7 architecture
 
-and `docker-compose up -d`
+        ```sh
+        docker build -t qmcgaw/REPONAME_DOCKER \
+        --build-arg BASE_IMAGE_BUILDER_GO=arm32v7/golang \
+        --build-arg BASE_IMAGE_BUILDER_NODE=arm32v7/alpine \
+        --build-arg GOARCH=arm \
+        --build-arg GOARM=7 \
+        https://github.com/qdm12/stackedit-docker.git
+        ```
 
-Build with:
+    - If you have a ARM 64 bit v8 architecture
 
-```bash
-docker build -t qmcgaw/stackedit https://github.com/qdm12/stackedit-docker.git
-```
+        ```sh
+        docker build -t qmcgaw/REPONAME_DOCKER \
+        --build-arg BASE_IMAGE_BUILDER_GO=arm64v8/golang \
+        --build-arg BASE_IMAGE_BUILDER_NODE=arm64v8/alpine \
+        --build-arg GOARCH=arm64 \
+        https://github.com/qdm12/stackedit-docker.git
+        ```
 
-Access with [http://localhost:8000](http://localhost:8000)
+    </p></details>
+
+1. Use the following command:
+
+    ```sh
+    docker run -d -p 8000:8000/tcp qmcgaw/stackedit
+    ```
+
+    You can also use [docker-compose.yml](https://github.com/qdm12/stackedit-docker/blob/master/docker-compose.yml) with:
+
+    ```sh
+    docker-compose up -d
+    ```
+
+1. Access at [http://localhost:8000](http://localhost:8000)
 
 ## Environment variables
 
