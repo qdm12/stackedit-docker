@@ -1,6 +1,6 @@
 # StackEdit Docker server
 
-*StackEdit v5.13.3 (November 2018) with a Golang HTTP server on Scratch*
+*StackEdit v5.14.0 (July 2019) with a Golang HTTP server on Scratch*
 
 [![Docker StackEdit](https://github.com/qdm12/stackedit-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/stackedit/)
 
@@ -27,7 +27,7 @@
 
 - [Stackedit features](https://github.com/benweet/stackedit/blob/master/README.md#stackedit-can)
 - Lightweight image based on:
-  - [Stackedit 5.13.3](https://github.com/benweet/stackedit)
+  - [Stackedit 5.14.0](https://github.com/benweet/stackedit)
   - [Scratch](https://hub.docker.com/_/scratch)
   - Golang simple HTTP static server
 - Running without root
