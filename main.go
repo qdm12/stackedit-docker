@@ -12,7 +12,10 @@ import (
 	"github.com/kyokomi/emoji"
 )
 
-const defaultListeningPort = "8000"
+const (
+	defaultListeningPort = "8000"
+	defaultConf = `{"dropboxAppKey":"","dropboxAppKeyFull":"","githubClientId":"","googleClientId":"","googleApiKey":"","wordpressClientId":"","allowSponsorship":true}`
+)
 
 func parseEnv() (listeningPort string) {
 	listeningPort = os.Getenv("LISTENINGPORT")
@@ -97,24 +100,31 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	})
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/conf" {
-			fmt.Fprintf(w, "%s", `{"dropboxAppKey":"","dropboxAppKeyFull":"","githubClientId":"","googleClientId":"","googleApiKey":"","wordpressClientId":"","allowSponsorship":true}`)
-			return;
-		}
 
 		switch {
+		case r.URL.Path == "/conf" || r.URL.Path == "/app/conf":
+			// TODO: read from `docker config` or ENVIROMENT or File
+			fmt.Fprintf(w, "%s", defaultConf)
+			return;
+
+		case r.URL.Path == "/":
+			r.URL.Path = "/static/landing/"
+
+		case strings.HasPrefix(r.URL.Path, "/static/landing/"):
+			r.URL.Path = r.URL.Path
+
+		case r.URL.Path == "/sitemap.xml":
+			r.URL.Path = "/static/sitemap.xml"
+
+		case r.URL.Path == "/oauth2/callback":
+			r.URL.Path = "/static/oauth2/callback.html"
+
 		case r.URL.Path == "/app" || r.URL.Path == "/app/":
-			r.URL.Path = "/dist/index.html"
+			r.URL.Path = "/dist/"
+
 		case strings.HasPrefix(r.URL.Path, "/app/"):
-			r.URL.Path = "/dist" + r.URL.Path[4:]
-		case r.URL.Path == "/editor" || r.URL.Path == "/editor/":
-			r.URL.Path = "/views/editor.html"
-		case strings.HasPrefix(r.URL.Path, "/editor/"):
-			r.URL.Path = "/views" + r.URL.Path[7:]
-		case r.URL.Path == "/viewer" || r.URL.Path == "/viewer/":
-			r.URL.Path = "/views/viewer.html"
-		case strings.HasPrefix(r.URL.Path, "/view/"):
-			r.URL.Path = "/views" + r.URL.Path[5:]
+			r.URL.Path = "/dist/" + r.URL.Path[4:]
+
 		default:
 			if strings.HasPrefix(r.URL.Path, "/") {
 				r.URL.Path = "/dist" + r.URL.Path
@@ -123,8 +133,8 @@ func main() {
 			}
 		}
 
-		http.ServeFile(w, r, "/html"+r.URL.Path)
-	}
+		http.ServeFile(w, r, "/html" + r.URL.Path)
+	});
 
 	log.Println("Web UI listening on 0.0.0.0:" + listeningPort + emoji.Sprint(" :ear:"))
 	log.Fatal(http.ListenAndServe("0.0.0.0:"+listeningPort, nil))

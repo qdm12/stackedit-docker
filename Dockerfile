@@ -52,6 +52,6 @@ EXPOSE 8000
 HEALTHCHECK --start-period=1s --interval=100s --timeout=2s --retries=1 CMD ["/server","healthcheck"]
 USER 1000
 ENTRYPOINT ["/server"]
-COPY --from=stackedit --chown=1000 /stackedit/dist  /html/dist
-COPY --from=stackedit --chown=1000 /stackedit/views /html/views
+COPY --from=stackedit --chown=1000 /stackedit/dist   /html/dist
+COPY --from=stackedit --chown=1000 /stackedit/static /html/static
 COPY --from=server --chown=1000 /tmp/gobuild/app /server
