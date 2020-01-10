@@ -97,15 +97,35 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	})
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if len(r.URL.Path) >= 4 && r.URL.Path[:4] == "/app" {
-			if len(r.URL.Path) == 4 {
-				r.URL.Path = "/"
-			} else {
-				r.URL.Path = strings.Replace("/"+r.URL.Path[5:], "//", "/", -1)
-			}
+
+		if r.URL.Path == "/conf" {
+			fmt.Fprintf(w, "%s", `{"dropboxAppKey":"","dropboxAppKeyFull":"","githubClientId":"","googleClientId":"","googleApiKey":"","wordpressClientId":"","allowSponsorship":true}`)
+			return;
 		}
-		http.ServeFile(w, r, "/html/"+r.URL.Path[1:])
-	})
+
+
+		switch {
+		case r.URL.Path == "/app" || r.URL.Path == "/app/":
+			r.URL.Path = "/index.html"
+		case strings.HasPrefix(r.URL.Path, "/app/"):
+			r.URL.Path = r.URL.Path[4:]
+		case r.URL.Path == "/editor" || r.URL.Path == "/editor/":
+			r.URL.Path = "/editor.html"
+		case strings.HasPrefix(r.URL.Path, "/editor/"):
+			r.URL.Path = r.URL.Path[7:]
+		case r.URL.Path == "/view" || r.URL.Path == "/view/":
+			r.URL.Path = "/view.html"
+		case strings.HasPrefix(r.URL.Path, "/view/"):
+			r.URL.Path = r.URL.Path[5:]
+		}
+
+		if strings.HasPrefix(r.URL.Path, "/") {
+			http.ServeFile(w, r, "/html"+r.URL.Path)
+		} else {
+			http.ServeFile(w, r, "/html/"+r.URL.Path)
+		}
+	}
+
 	log.Println("Web UI listening on 0.0.0.0:" + listeningPort + emoji.Sprint(" :ear:"))
 	log.Fatal(http.ListenAndServe("0.0.0.0:"+listeningPort, nil))
 }
