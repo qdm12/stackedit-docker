@@ -62,7 +62,8 @@
 
 ## Environment variables
 
-- `LISTENINGPORT` to change the internal HTTP server listening port if you need to
+- `LISTENING_PORT` to change the internal HTTP server listening port if you need to
+- `ROOT_URL` to define a root URL (i.e. `/mypath`) if you use a reverse proxy such as Nginx
 
 ## Acknowledgements
 
