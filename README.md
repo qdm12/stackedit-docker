@@ -62,8 +62,22 @@
 
 ## Environment variables
 
-- `LISTENING_PORT` to change the internal HTTP server listening port if you need to
-- `ROOT_URL` to define a root URL (i.e. `/mypath`) if you use a reverse proxy such as Nginx
+| Environment variable | Default | Description |
+| --- | --- | --- |
+| `LISTENING_PORT` | `8000` | Internal server listening port |
+| `ROOT_URL` | `/` | Root URL to use, useful when used with a reverse proxy |
+| `NODE_ENV` | `production` | Sets production behavior for stackedit  |
+| `PANDOC_PATH` | `pandoc` | *Non functional yet* |
+| `WKHTMLTOPDF_PATH` | `wkhtmltopdf` | *Non functional yet* |
+| `USER_BUCKET_NAME` | `stackedit-users` | ? |
+| `PAYPAL_RECEIVER_EMAIL` |  | Receive Paypal donation email address |
+| `DROPBOX_APP_KEY` | | |
+| `DROPBOX_APP_KEY_FULL` | | |
+| `GITHUB_CLIENT_ID` | | |
+| `GITHUB_CLIENT_SECRET` | | |
+| `GOOGLE_CLIENT_ID` | | |
+| `GOOGLE_API_KEY` | | |
+| `WORDPRESS_CLIENT_ID` | | |
 
 ## Acknowledgements
 
@@ -71,5 +85,7 @@ Credits to the [developers](https://github.com/benweet/stackedit/graphs/contribu
 
 ## TODOs
 
-- [ ] Configuration of Stackedit with env variables
+- [ ] Add static binary programs
+    - [ ] pandoc
+    - [ ] wkhtmltopdf
 - [ ] Travis CI build cross CPU arch

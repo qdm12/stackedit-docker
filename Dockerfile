@@ -41,6 +41,21 @@ EXPOSE 8000
 HEALTHCHECK --start-period=1s --interval=100s --timeout=2s --retries=1 CMD ["/server","healthcheck"]
 USER 1000
 ENTRYPOINT ["/server"]
+ENV \
+    LISTENING_PORT=8000 \
+    ROOT_URL=/ \
+    NODE_ENV=production \
+    PANDOC_PATH=pandoc \
+    WKHTMLTOPDF_PATH=wkhtmltopdf \
+    USER_BUCKET_NAME=stackedit-users \
+    PAYPAL_RECEIVER_EMAIL= \
+    DROPBOX_APP_KEY= \
+    DROPBOX_APP_KEY_FULL= \
+    GITHUB_CLIENT_ID= \
+    GITHUB_CLIENT_SECRET= \
+    GOOGLE_CLIENT_ID= \
+    GOOGLE_API_KEY= \
+    WORDPRESS_CLIENT_ID=
 COPY --from=stackedit --chown=1000 /stackedit/dist   /html/dist
 COPY --from=stackedit --chown=1000 /stackedit/static /html/static
 COPY --from=server --chown=1000 /tmp/gobuild/app /server
