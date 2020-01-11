@@ -14,12 +14,13 @@ RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o app main.go
 FROM alpine:${ALPINE_VERSION} AS stackedit
 ARG STACKEDIT_VERSION
 WORKDIR /stackedit
-RUN apk add -q --progress --update --no-cache git npm
+RUN apk add -q --progress --update --no-cache git npm python2
 RUN wget -q https://github.com/benweet/stackedit/archive/${STACKEDIT_VERSION}.tar.gz -O stackedit.tar.gz && \
     tar -xzf stackedit.tar.gz --strip-components=1 && \
     rm stackedit.tar.gz
-#ENV NODE_ENV production
 RUN npm install
+RUN npm audit fix
+ENV NODE_ENV=production
 RUN npm run build
 
 FROM scratch AS final
