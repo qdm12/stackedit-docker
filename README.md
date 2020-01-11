@@ -1,6 +1,6 @@
 # StackEdit Docker server
 
-*StackEdit v5.14.0 (July 2019) with a Golang HTTP server on Scratch*
+*StackEdit v5.14.5 (January 2020) with a Golang HTTP server on Scratch*
 
 [![Docker StackEdit](https://github.com/qdm12/stackedit-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/stackedit/)
 
@@ -21,13 +21,13 @@
 
 | Image size | RAM usage | CPU usage |
 | --- | --- | --- |
-| 29.3MB | 7MB | Very low |
+| 34.1MB | 7MB | Very low |
 
 ## Features
 
 - [Stackedit features](https://github.com/benweet/stackedit/blob/master/README.md#stackedit-can)
 - Lightweight image based on:
-  - [Stackedit 5.14.0](https://github.com/benweet/stackedit)
+  - [Stackedit 5.14.5](https://github.com/benweet/stackedit)
   - [Scratch](https://hub.docker.com/_/scratch)
   - Golang simple HTTP static server
 - Running without root
@@ -38,37 +38,11 @@
 
 1. <details><summary>CLICK IF YOU HAVE AN ARM DEVICE</summary><p>
 
-    - If you have a ARM 32 bit v6 architecture
+    You need to build the Docker image yourself using `git` and `docker`
 
-        ```sh
-        docker build -t qmcgaw/REPONAME_DOCKER \
-        --build-arg BASE_IMAGE_BUILDER_GO=arm32v6/golang \
-        --build-arg BASE_IMAGE_BUILDER_NODE=arm32v6/alpine \
-        --build-arg GOARCH=arm \
-        --build-arg GOARM=6 \
-        https://github.com/qdm12/stackedit-docker.git
-        ```
-
-    - If you have a ARM 32 bit v7 architecture
-
-        ```sh
-        docker build -t qmcgaw/REPONAME_DOCKER \
-        --build-arg BASE_IMAGE_BUILDER_GO=arm32v7/golang \
-        --build-arg BASE_IMAGE_BUILDER_NODE=arm32v7/alpine \
-        --build-arg GOARCH=arm \
-        --build-arg GOARM=7 \
-        https://github.com/qdm12/stackedit-docker.git
-        ```
-
-    - If you have a ARM 64 bit v8 architecture
-
-        ```sh
-        docker build -t qmcgaw/REPONAME_DOCKER \
-        --build-arg BASE_IMAGE_BUILDER_GO=arm64v8/golang \
-        --build-arg BASE_IMAGE_BUILDER_NODE=arm64v8/alpine \
-        --build-arg GOARCH=arm64 \
-        https://github.com/qdm12/stackedit-docker.git
-        ```
+    ```sh
+    docker build -t qmcgaw/stackedit https://github.com/qdm12/stackedit-docker.git
+    ```
 
     </p></details>
 
@@ -92,9 +66,9 @@
 
 ## Acknowledgements
 
-Credits to the [developers](https://github.com/benweet/stackedit/graphs/contributors) 
-of [StackEdit](https://stackedit.io/)
+Credits to the [developers](https://github.com/benweet/stackedit/graphs/contributors) of [StackEdit](https://stackedit.io/)
 
 ## TODOs
 
 - [ ] Configuration of Stackedit with env variables
+- [ ] Travis CI build cross CPU arch
