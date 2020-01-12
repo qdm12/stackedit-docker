@@ -1,6 +1,6 @@
 # StackEdit Docker server
 
-*StackEdit v5.14.0 (July 2019) with a Golang HTTP server on Scratch*
+*StackEdit v5.14.5 (January 2020) with a Golang HTTP server on Scratch*
 
 [![Docker StackEdit](https://github.com/qdm12/stackedit-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/stackedit/)
 
@@ -21,13 +21,13 @@
 
 | Image size | RAM usage | CPU usage |
 | --- | --- | --- |
-| 29.3MB | 7MB | Very low |
+| 34.1MB | 7MB | Very low |
 
 ## Features
 
 - [Stackedit features](https://github.com/benweet/stackedit/blob/master/README.md#stackedit-can)
 - Lightweight image based on:
-  - [Stackedit 5.14.0](https://github.com/benweet/stackedit)
+  - [Stackedit 5.14.5](https://github.com/benweet/stackedit)
   - [Scratch](https://hub.docker.com/_/scratch)
   - Golang simple HTTP static server
 - Running without root
@@ -38,37 +38,11 @@
 
 1. <details><summary>CLICK IF YOU HAVE AN ARM DEVICE</summary><p>
 
-    - If you have a ARM 32 bit v6 architecture
+    You need to build the Docker image yourself using `git` and `docker`
 
-        ```sh
-        docker build -t qmcgaw/REPONAME_DOCKER \
-        --build-arg BASE_IMAGE_BUILDER_GO=arm32v6/golang \
-        --build-arg BASE_IMAGE_BUILDER_NODE=arm32v6/alpine \
-        --build-arg GOARCH=arm \
-        --build-arg GOARM=6 \
-        https://github.com/qdm12/stackedit-docker.git
-        ```
-
-    - If you have a ARM 32 bit v7 architecture
-
-        ```sh
-        docker build -t qmcgaw/REPONAME_DOCKER \
-        --build-arg BASE_IMAGE_BUILDER_GO=arm32v7/golang \
-        --build-arg BASE_IMAGE_BUILDER_NODE=arm32v7/alpine \
-        --build-arg GOARCH=arm \
-        --build-arg GOARM=7 \
-        https://github.com/qdm12/stackedit-docker.git
-        ```
-
-    - If you have a ARM 64 bit v8 architecture
-
-        ```sh
-        docker build -t qmcgaw/REPONAME_DOCKER \
-        --build-arg BASE_IMAGE_BUILDER_GO=arm64v8/golang \
-        --build-arg BASE_IMAGE_BUILDER_NODE=arm64v8/alpine \
-        --build-arg GOARCH=arm64 \
-        https://github.com/qdm12/stackedit-docker.git
-        ```
+    ```sh
+    docker build -t qmcgaw/stackedit https://github.com/qdm12/stackedit-docker.git
+    ```
 
     </p></details>
 
@@ -88,13 +62,30 @@
 
 ## Environment variables
 
-- `LISTENINGPORT` to change the internal HTTP server listening port if you need to
+| Environment variable | Default | Description |
+| --- | --- | --- |
+| `LISTENING_PORT` | `8000` | Internal server listening port |
+| `ROOT_URL` | `/` | Root URL to use, useful when used with a reverse proxy |
+| `NODE_ENV` | `production` | Sets production behavior for stackedit  |
+| `PANDOC_PATH` | `pandoc` | *Non functional yet* |
+| `WKHTMLTOPDF_PATH` | `wkhtmltopdf` | *Non functional yet* |
+| `USER_BUCKET_NAME` | `stackedit-users` | ? |
+| `PAYPAL_RECEIVER_EMAIL` |  | Receive Paypal donation email address |
+| `DROPBOX_APP_KEY` | | |
+| `DROPBOX_APP_KEY_FULL` | | |
+| `GITHUB_CLIENT_ID` | | |
+| `GITHUB_CLIENT_SECRET` | | |
+| `GOOGLE_CLIENT_ID` | | |
+| `GOOGLE_API_KEY` | | |
+| `WORDPRESS_CLIENT_ID` | | |
 
 ## Acknowledgements
 
-Credits to the [developers](https://github.com/benweet/stackedit/graphs/contributors) 
-of [StackEdit](https://stackedit.io/)
+Credits to the [developers](https://github.com/benweet/stackedit/graphs/contributors) of [StackEdit](https://stackedit.io/)
 
 ## TODOs
 
-- [ ] Configuration of Stackedit with env variables
+- [ ] Add static binary programs
+    - [ ] pandoc
+    - [ ] wkhtmltopdf
+- [ ] Travis CI build cross CPU arch
