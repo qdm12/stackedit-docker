@@ -1,12 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
 	"strings"
 
-	"github.com/julienschmidt/httprouter"
 	"github.com/kyokomi/emoji"
 	"github.com/qdm12/golibs/healthcheck"
 	"github.com/qdm12/golibs/logging"
@@ -47,38 +47,30 @@ func main() {
 	}
 	logging.Infof("Using root URL %q", rootURL)
 
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		path := r.URL.Path
-		switch path {
-		case rootURL + "/conf", rootURL + "/app/conf":
-			// TODO: read from `docker config` or ENVIROMENT or File
-			fmt.Fprintf(w, "%s", defaultConf)
+	productionRouter := http.NewServeMux()
+	productionRouter.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		urlStackeditPath := strings.TrimPrefix(r.URL.Path, rootURL)
+		filepath := "/dist/" + urlStackeditPath
+		switch urlStackeditPath {
+		case "/conf", "/app/conf":
+			w.Write(getAllStackeditEnv())
 			return
-		case rootURL + "/":
-			path = rootURL + "/static/landing/"
-		case rootURL + "/sitemap.xml":
-			path = rootURL + "/static/sitemap.xml"
-		case rootURL + "/oauth2/callback":
-			path = rootURL + "/static/oauth2/callback.html"
-		case rootURL + "/app", rootURL + "/app/":
-			path = rootURL + "/dist/"
+		case "/":
+			filepath = "/static/landing/"
+		case "/sitemap.xml":
+			filepath = "/static/sitemap.xml"
+		case "/oauth2/callback":
+			filepath = "/static/oauth2/callback.html"
+		case "/app", "/app/":
+			filepath = "/dist/"
 		default:
 			switch {
-			case strings.HasPrefix(path, rootURL+"/app/"):
-				path = rootURL + "/dist/" + path[len(rootURL)+4:]
-			case strings.HasPrefix(path, rootURL+"/"):
-				path = rootURL + "/dist" + path[len(rootURL):]
-			default:
-				path = rootURL + "/dist/" + path
+			case strings.HasPrefix(urlStackeditPath, "/app/"):
+				filepath = "/dist/" + strings.TrimPrefix(urlStackeditPath, "/app/")
 			}
 		}
-		http.ServeFile(w, r, "/html"+path)
-	}
-
-	logging.Info("Web UI listening on 0.0.0.0:" + listeningPort + emoji.Sprint(" :ear:"))
-
-	productionRouter := httprouter.New()
-	productionRouter.HandlerFunc(http.MethodGet, rootURL+"/", handler)
+		http.ServeFile(w, r, "/html"+filepath)
+	})
 	healthcheckRouter := healthcheck.CreateRouter(func() error { return nil })
 	serverErrs := server.RunServers(
 		server.Settings{Name: "production", Addr: "0.0.0.0:" + listeningPort, Handler: productionRouter},
@@ -93,4 +85,33 @@ func main() {
 		logging.Errorf("%v", serverErrs)
 		os.Exit(1)
 	}
+}
+
+// Returns all stackedit env values as JSON
+func getAllStackeditEnv() []byte {
+	env := struct {
+		DropboxAppKey       string `json:"dropboxAppKey"`
+		DropboxAppKeyFull   string `json:"dropboxAppKeyFull"`
+		GithubClientID      string `json:"githubClientId"`
+		GithubClientSecret  string `json:"githubClientSecret"`
+		GoogleClientID      string `json:"googleClientId"`
+		GoogleAPIKey        string `json:"googleApiKey"`
+		WordpressClientID   string `json:"wordpressClientId"`
+		PaypalReceiverEmail string `json:"paypalReceiverEmail"`
+		AllowSponsorship    bool   `json:"allowSponsorship"`
+	}{}
+	envParams := params.NewEnvParams()
+	env.DropboxAppKey, _ = envParams.GetEnv("DROPBOX_APP_KEY")
+	env.DropboxAppKeyFull, _ = envParams.GetEnv("DROPBOX_APP_KEY_FULL")
+	env.GithubClientID, _ = envParams.GetEnv("GITHUB_CLIENT_ID")
+	env.GithubClientSecret, _ = envParams.GetEnv("GITHUB_CLIENT_SECRET")
+	env.GoogleClientID, _ = envParams.GetEnv("GOOGLE_CLIENT_ID")
+	env.GoogleAPIKey, _ = envParams.GetEnv("GOOGLE_API_KEY")
+	env.WordpressClientID, _ = envParams.GetEnv("WORDPRESS_CLIENT_ID")
+	env.PaypalReceiverEmail, _ = envParams.GetEnv("PAYPAL_RECEIVER_EMAIL")
+	if len(env.PaypalReceiverEmail) > 0 {
+		env.AllowSponsorship = true
+	}
+	b, _ := json.Marshal(env)
+	return b
 }
