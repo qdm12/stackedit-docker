@@ -62,7 +62,7 @@ func main() {
 		case "/oauth2/callback":
 			filepath = "/static/oauth2/callback.html"
 		case "/app", "/app/":
-			filepath = "/dist/"
+			filepath = "/dist/index.html"
 		default:
 			switch {
 			case strings.HasPrefix(urlStackeditPath, "/static/css/static/fonts/"):
