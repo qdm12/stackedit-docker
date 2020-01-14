@@ -65,6 +65,8 @@ func main() {
 			filepath = "/dist/"
 		default:
 			switch {
+			case strings.HasPrefix(urlStackeditPath, "/app/static/css/static/fonts/"):
+				filepath = "/dist/" + strings.TrimPrefix(urlStackeditPath, "/app/static/css/")
 			case strings.HasPrefix(urlStackeditPath, "/app/"):
 				filepath = "/dist/" + strings.TrimPrefix(urlStackeditPath, "/app/")
 			}
