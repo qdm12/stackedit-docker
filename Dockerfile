@@ -21,6 +21,7 @@ RUN wget -q https://github.com/benweet/stackedit/archive/${STACKEDIT_VERSION}.ta
 RUN npm install
 RUN npm audit fix
 ENV NODE_ENV=production
+RUN sed -i "s/assetsPublicPath: '\/',/assetsPublicPath: '.\/',/g" config/index.js && cat config/index.js
 RUN npm run build
 
 FROM scratch AS final
