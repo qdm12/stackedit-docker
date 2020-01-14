@@ -1,8 +1,20 @@
-version: '3'
+version: "3.7"
 services:
   stackedit:
     image: qmcgaw/stackedit
     container_name: stackedit
+    environment:
+      - LISTENING_PORT=8000
+      - ROOT_URL=/
+      - USER_BUCKET_NAME=stackedit-users
+      - PAYPAL_RECEIVER_EMAIL=
+      - DROPBOX_APP_KEY=
+      - DROPBOX_APP_KEY_FULL=
+      - GITHUB_CLIENT_ID=
+      - GITHUB_CLIENT_SECRET=
+      - GOOGLE_CLIENT_ID=
+      - GOOGLE_API_KEY=
+      - WORDPRESS_CLIENT_ID=
     ports:
       - 8000:8000/tcp
     network_mode: bridge
