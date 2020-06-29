@@ -3,13 +3,14 @@ ARG GO_VERSION=1.14
 ARG STACKEDIT_VERSION=v5.14.5
 
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS server
-RUN apk --update add git g++
+RUN apk --update add git
+ENV CGO_ENABLED=0
 WORKDIR /tmp/gobuild
 COPY go.mod go.sum ./
 RUN go mod download 2>&1
 COPY main.go ./
 #RUN go test -v -race ./...
-RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o app main.go
+RUN go build -ldflags="-s -w" -o app main.go
 
 FROM --platform=amd64 alpine:${ALPINE_VERSION} AS stackedit
 ARG STACKEDIT_VERSION
