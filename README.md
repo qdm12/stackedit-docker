@@ -2,7 +2,7 @@
 
 *StackEdit v5.14.5 (January 2020) with a Golang HTTP server on Scratch*
 
-[![Docker StackEdit](https://github.com/qdm12/stackedit-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/stackedit/)
+[![Docker StackEdit](https://github.com/qdm12/stackedit-docker/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/stackedit/)
 
 [![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/stackedit.svg)](https://hub.docker.com/r/qmcgaw/stackedit)
 
