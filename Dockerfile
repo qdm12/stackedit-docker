@@ -5,11 +5,14 @@ ARG STACKEDIT_VERSION=v5.14.5
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS server
 RUN apk --update add git
 ENV CGO_ENABLED=0
+RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s ${GOLANGCI_LINT_VERSION}
 WORKDIR /tmp/gobuild
+COPY .golangci.yml .
 COPY go.mod go.sum ./
 RUN go mod download 2>&1
 COPY main.go ./
 #RUN go test -v -race ./...
+RUN golangci-lint run --timeout=10m
 RUN go build -ldflags="-s -w" -o app main.go
 
 FROM --platform=amd64 alpine:${ALPINE_VERSION} AS stackedit
