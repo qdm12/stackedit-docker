@@ -18,14 +18,12 @@ RUN go build -ldflags="-s -w" -o app main.go
 FROM --platform=amd64 alpine:${ALPINE_VERSION} AS stackedit
 ARG STACKEDIT_VERSION
 WORKDIR /stackedit
-RUN apk add -q --progress --update --no-cache git npm python2
-RUN wget -q https://github.com/benweet/stackedit/archive/${STACKEDIT_VERSION}.tar.gz -O stackedit.tar.gz && \
-    tar -xzf stackedit.tar.gz --strip-components=1 && \
-    rm stackedit.tar.gz
-RUN npm install
+RUN apk add -q --progress --update --no-cache git npm
+RUN git clone --branch ${STACKEDIT_VERSION} --single-branch --depth 1 https://github.com/benweet/stackedit.git . &> /dev/null
+RUN npm install --only=prod
 RUN npm audit fix
 ENV NODE_ENV=production
-RUN sed -i "s/assetsPublicPath: '\/',/assetsPublicPath: '.\/',/g" config/index.js && cat config/index.js
+RUN sed -i "s/assetsPublicPath: '\/',/assetsPublicPath: '.\/',/g" config/index.js
 RUN npm run build
 
 FROM scratch AS final
