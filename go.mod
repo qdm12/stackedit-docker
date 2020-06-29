@@ -1,9 +1,8 @@
 module github.com/qdm12/stackedit-docker
 
 require (
-	github.com/julienschmidt/httprouter v1.3.0
-	github.com/kyokomi/emoji v1.5.1
-	github.com/qdm12/golibs v0.0.0-20200108212314-82caecb70123
+	github.com/kyokomi/emoji v2.2.4+incompatible
+	github.com/qdm12/golibs v0.0.0-20200528010515-765b7cd4f0db
 )
 
-go 1.13
+go 1.14

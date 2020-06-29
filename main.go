@@ -1,11 +1,14 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 
 	"github.com/kyokomi/emoji"
 	"github.com/qdm12/golibs/healthcheck"
@@ -14,18 +17,23 @@ import (
 	"github.com/qdm12/golibs/server"
 )
 
-const (
-	defaultConf = `{"dropboxAppKey":"","dropboxAppKeyFull":"","githubClientId":"","googleClientId":"","googleApiKey":"","wordpressClientId":"","allowSponsorship":true}`
-)
-
 func main() {
-	if healthcheck.Mode(os.Args) {
+	ctx := context.Background()
+	os.Exit(_main(ctx, os.Args))
+}
+
+func _main(ctx context.Context, args []string) int {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	if healthcheck.Mode(args) {
 		if err := healthcheck.Query(); err != nil {
-			logging.Err(err)
-			os.Exit(1)
+			fmt.Println(err)
+			return 1
 		}
-		os.Exit(0)
+		return 0
 	}
+
 	fmt.Println("#####################################")
 	fmt.Println("########## StackEdit Server #########")
 	fmt.Println("########## by Quentin McGaw #########")
@@ -33,19 +41,28 @@ func main() {
 	fmt.Println("# github.com/qdm12/stackedit-docker #")
 	fmt.Print("#####################################\n\n")
 	envParams := params.NewEnvParams()
-	logging.InitLogger("console", logging.InfoLevel, 0)
-	listeningPort, err := envParams.GetListeningPort(params.Default("8000"))
+	logger, err := logging.NewLogger(logging.ConsoleEncoding, logging.InfoLevel, -1)
 	if err != nil {
-		logging.Err(err)
-		os.Exit(1)
+		fmt.Println(err)
+		return 1
 	}
-	logging.Infof("Using internal listening port %s", listeningPort)
+
+	listeningPort, warning, err := envParams.GetListeningPort(params.Default("8000"))
+	if len(warning) > 0 {
+		logger.Warn(warning)
+	}
+	if err != nil {
+		logger.Error(err)
+		return 1
+	}
+	logger.Info("Using internal listening port %s", listeningPort)
+
 	rootURL, err := envParams.GetRootURL(params.Default("/"))
 	if err != nil {
-		logging.Err(err)
-		os.Exit(1)
+		logger.Error(err)
+		return 1
 	}
-	logging.Infof("Using root URL %q", rootURL)
+	logger.Info("Using root URL %q", rootURL)
 
 	productionRouter := http.NewServeMux()
 	productionRouter.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -53,7 +70,10 @@ func main() {
 		filepath := "/dist/" + urlStackeditPath
 		switch urlStackeditPath {
 		case "/conf", "/app/conf":
-			w.Write(getAllStackeditEnv())
+			bytes := getAllStackeditEnv()
+			if _, err := w.Write(bytes); err != nil {
+				logger.Error(err)
+			}
 			return
 		case "/":
 			filepath = "/static/landing/"
@@ -75,19 +95,35 @@ func main() {
 		}
 		http.ServeFile(w, r, "/html"+filepath)
 	})
-	healthcheckRouter := healthcheck.CreateRouter(func() error { return nil })
-	serverErrs := server.RunServers(
-		server.Settings{Name: "production", Addr: "0.0.0.0:" + listeningPort, Handler: productionRouter},
-		server.Settings{Name: "healthcheck", Addr: "127.0.0.1:9999", Handler: healthcheckRouter},
+	healthcheckHandlerFunc := healthcheck.GetHandler(func() error { return nil })
+	serverErrors := make(chan []error)
+	go func() {
+		serverErrors <- server.RunServers(ctx,
+			server.Settings{Name: "production", Addr: "0.0.0.0:" + listeningPort, Handler: productionRouter},
+			server.Settings{Name: "healthcheck", Addr: "127.0.0.1:9999", Handler: healthcheckHandlerFunc},
+		)
+	}()
+
+	osSignals := make(chan os.Signal, 1)
+	signal.Notify(osSignals,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		os.Interrupt,
 	)
-	for _, err := range serverErrs {
-		if err != nil {
-			logging.Err(err)
+	select {
+	case errors := <-serverErrors:
+		for _, err := range errors {
+			logger.Error(err)
 		}
-	}
-	if len(serverErrs) > 0 {
-		logging.Errorf("%v", serverErrs)
-		os.Exit(1)
+		return 1
+	case signal := <-osSignals:
+		message := fmt.Sprintf("Stopping program: caught OS signal %q", signal)
+		logger.Warn(message)
+		return 2
+	case <-ctx.Done():
+		message := fmt.Sprintf("Stopping program: %s", ctx.Err())
+		logger.Warn(message)
+		return 1
 	}
 }
 
