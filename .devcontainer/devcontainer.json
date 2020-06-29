@@ -1,14 +1,18 @@
 {
     "name": "stackedit-docker-dev",
-    "dockerComposeFile": ["docker-compose.yml"],
+    "dockerComposeFile": [
+        "docker-compose.yml"
+    ],
     "service": "vscode",
-    "runServices": ["vscode"],
+    "runServices": [
+        "vscode"
+    ],
     "shutdownAction": "stopCompose",
     "postCreateCommand": "go mod download",
     "workspaceFolder": "/workspace",
     "appPort": 8000,
     "extensions": [
-        "ms-vscode.go",
+        "golang.go",
         "IBM.output-colorizer",
         "eamodio.gitlens",
         "mhutchie.git-graph",
@@ -39,10 +43,58 @@
             "deepCompletion": true,
             "usePlaceholders": false
         },
+        "go.lintTool": "golangci-lint",
+        "go.lintFlags": [
+            "--fast",
+            "--enable",
+            "rowserrcheck",
+            "--enable",
+            "bodyclose",
+            "--enable",
+            "dogsled",
+            "--enable",
+            "dupl",
+            "--enable",
+            "gochecknoglobals",
+            "--enable",
+            "gochecknoinits",
+            "--enable",
+            "gocognit",
+            "--enable",
+            "goconst",
+            "--enable",
+            "gocritic",
+            "--enable",
+            "gocyclo",
+            "--enable",
+            "goimports",
+            "--enable",
+            "golint",
+            "--enable",
+            "gosec",
+            "--enable",
+            "interfacer",
+            "--enable",
+            "maligned",
+            "--enable",
+            "misspell",
+            "--enable",
+            "nakedret",
+            "--enable",
+            "prealloc",
+            "--enable",
+            "scopelint",
+            "--enable",
+            "unconvert",
+            "--enable",
+            "unparam",
+            "--enable",
+            "whitespace"
+        ],
         // Golang on save
-        "go.buildOnSave": "package",
-        "go.lintOnSave": "package",
-        "go.vetOnSave": "package",
+        "go.buildOnSave": "workspace",
+        "go.lintOnSave": "workspace",
+        "go.vetOnSave": "workspace",
         "editor.formatOnSave": true,
         "[go]": {
             "editor.codeActionsOnSave": {
@@ -50,7 +102,16 @@
             }
         },
         // Golang testing
-        "go.testFlags": ["-v"],
+        "go.toolsEnvVars": {
+            "GOFLAGS": "-tags="
+        },
+        "gopls.env": {
+            "GOFLAGS": "-tags="
+        },
+        "go.testEnvVars": {},
+        "go.testFlags": [
+            "-v"
+        ],
         "go.testTimeout": "600s"
     }
 }
