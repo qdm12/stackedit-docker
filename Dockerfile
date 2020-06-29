@@ -11,7 +11,7 @@ COPY main.go ./
 #RUN go test -v -race ./...
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o app main.go
 
-FROM alpine:${ALPINE_VERSION} AS stackedit
+FROM --platform=amd64 alpine:${ALPINE_VERSION} AS stackedit
 ARG STACKEDIT_VERSION
 WORKDIR /stackedit
 RUN apk add -q --progress --update --no-cache git npm python2
