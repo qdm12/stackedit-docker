@@ -15,10 +15,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/qdm12/stackedit-docker.svg)](https://github.com/qdm12/stackedit-docker/issues)
 [![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/qmcgaw)
 
-| Image size | RAM usage | CPU usage |
-| --- | --- | --- |
-| 34.1MB | 7MB | Very low |
-
 ## Features
 
 - [Stackedit features](https://github.com/benweet/stackedit/blob/master/README.md#stackedit-can)
@@ -28,6 +24,7 @@
   - Golang simple HTTP static server
 - Running without root
 - Cross cpu architecture compatible: amd64, 386, arm64v8, arm32v7 and arm32v6 (ask for more)
+- Small 36.8MB image size (amd64, uncompressed)
 - Built-in Docker healthcheck
 - Nice emojis in the logs...
 
