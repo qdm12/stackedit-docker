@@ -27,14 +27,14 @@ RUN sed -i "s/assetsPublicPath: '\/',/assetsPublicPath: '.\/',/g" config/index.j
 RUN npm run build
 
 FROM scratch AS final
-ARG BUILD_DATE
-ARG VCS_REF
+ARG CREATED
+ARG COMMIT
 ARG STACKEDIT_VERSION
 LABEL \
     org.opencontainers.image.authors="quentin.mcgaw@gmail.com" \
-    org.opencontainers.image.created=$BUILD_DATE \
+    org.opencontainers.image.created=$CREATED \
     org.opencontainers.image.version=$STACKEDIT_VERSION \
-    org.opencontainers.image.revision=$VCS_REF \
+    org.opencontainers.image.revision=$COMMIT \
     org.opencontainers.image.url="https://github.com/qdm12/stackedit-docker" \
     org.opencontainers.image.documentation="https://github.com/qdm12/stackedit-docker/blob/master/README.md" \
     org.opencontainers.image.source="https://github.com/qdm12/stackedit-docker" \
