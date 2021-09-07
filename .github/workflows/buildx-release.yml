@@ -32,4 +32,3 @@ jobs:
             -t qmcgaw/stackedit:${GITHUB_REF##*/} \
             --push \
             .
-      - run: curl -X POST https://hooks.microbadger.com/images/qmcgaw/stackedit/Sb9uic5BXTlu5QaQPtBP0V1bm1E= || exit 0
