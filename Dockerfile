@@ -1,27 +1,48 @@
-ARG ALPINE_VERSION=3.14
-ARG GO_VERSION=1.14
-ARG STACKEDIT_VERSION=v5.14.5
+# Sets linux/amd64 in case it's not injected by older Docker versions
+ARG BUILDPLATFORM=linux/amd64
 
-FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS server
-RUN apk --update add git
+ARG ALPINE_VERSION=3.14
+ARG STACKEDIT_VERSION=v5.14.10
+ARG GO_VERSION=1.17
+ARG XCPUTRANSLATE_VERSION=v0.6.0
+ARG GOLANGCI_LINT_VERSION=v1.42.1
+
+FROM --platform=${BUILDPLATFORM} qmcgaw/xcputranslate:${XCPUTRANSLATE_VERSION} AS xcputranslate
+FROM --platform=${BUILDPLATFORM} qmcgaw/binpot:golangci-lint-${GOLANGCI_LINT_VERSION} AS golangci-lint
+
+FROM --platform=${BUILDPLATFORM} golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS base
 ENV CGO_ENABLED=0
-RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s ${GOLANGCI_LINT_VERSION}
 WORKDIR /tmp/gobuild
-COPY .golangci.yml .
+RUN apk --update add git g++
+COPY --from=xcputranslate /xcputranslate /usr/local/bin/xcputranslate
+COPY --from=golangci-lint /bin /go/bin/golangci-lint
 COPY go.mod go.sum ./
-RUN go mod download 2>&1
-COPY main.go ./
-#RUN go test -v -race ./...
+RUN go mod download
+COPY main.go .
+
+FROM base AS lint
+COPY .golangci.yml ./
 RUN golangci-lint run --timeout=10m
-RUN go build -ldflags="-s -w" -o app main.go
+
+FROM base AS server
+ARG TARGETPLATFORM
+ARG VERSION=unknown
+ARG CREATED="an unknown date"
+ARG COMMIT=unknown
+RUN GOARCH="$(xcputranslate translate -targetplatform=${TARGETPLATFORM} -field arch)" \
+    GOARM="$(xcputranslate translate -targetplatform=${TARGETPLATFORM} -field arm)" \
+    go build -trimpath -ldflags="-s -w \
+    -X 'main.version=$VERSION' \
+    -X 'main.buildDate=$CREATED' \
+    -X 'main.commit=$COMMIT' \
+    " -o app main.go
 
 FROM --platform=amd64 alpine:${ALPINE_VERSION} AS stackedit
 ARG STACKEDIT_VERSION
 WORKDIR /stackedit
-RUN apk add -q --progress --update --no-cache git npm
+RUN apk add -q --progress --update --no-cache git npm python3 make g++
 RUN git clone --branch ${STACKEDIT_VERSION} --single-branch --depth 1 https://github.com/benweet/stackedit.git . &> /dev/null
-RUN npm install --only=prod
-RUN npm audit fix
+RUN npm install
 ENV NODE_ENV=production
 RUN sed -i "s/assetsPublicPath: '\/',/assetsPublicPath: '.\/',/g" config/index.js
 RUN npm run build
